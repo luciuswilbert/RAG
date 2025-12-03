@@ -42,3 +42,12 @@ def clean_text(full_text):
 def write_text(database_path, clean_texts):
    with open(database_path, 'w', encoding='utf-8') as x:
       x.write(clean_texts)
+
+if __name__ == "__main__":
+  filepath = "Internship Report Part 2 - Lucius Wilbert Tjoa - TP072404.pdf"
+  database_path ="Database/report.txt"
+
+  full_text = read_pdf(filepath)
+  clean_text = clean_text(full_text)
+  write_text(database_path, clean_text)
+  print("Done")
