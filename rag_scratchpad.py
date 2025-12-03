@@ -29,10 +29,10 @@ norm_query = np.linalg.norm(query)
 # 3. Loop through the database
 for doc_vector in database:
     # A. Calculate Dot Product (query vs doc_vector)
-    current_dot = np.dot(..., ...)
+    current_dot = np.dot(query, doc_vector)
     
     # B. Calculate Norm of the current doc_vector
-    norm_doc = np.linalg.norm(...)
+    norm_doc = np.linalg.norm(doc_vector)
     
     # C. Calculate Cosine Similarity
     similarity = current_dot / (norm_query * norm_doc)
