@@ -21,7 +21,7 @@ for page in doc:
     full_text += page.get_text()
 
 # The 'Clean' Count (Removing all spaces and newlines)
-clean_text = full_text.replace(" ", "").replace("\n", "").replace("\r", "").replace("\t", "")
+clean_text = full_text.replace("\n", "").replace("\r", "").replace("\t", "")
 
 with open("Database/report.txt", 'w', encoding='utf-8') as w:
-    w.write(clean_text)
+    w.write(full_text)
