@@ -6,6 +6,7 @@ from langchain_chroma import Chroma
 import ollama
 import fitz  
 import re
+import os
 
 def read_pdf(filepath):
   doc = fitz.open(filepath) 
@@ -59,7 +60,7 @@ def query_similarity_search(embed_model, chroma_db_directory, query, k):
   results = vectorstore.similarity_search(query, k=k)
 
   for doc in results:
-    print(f"\Found Content: {doc.page_content}")
+    print(f"\nFound Content: {doc.page_content}")
   
   return results
 
@@ -70,17 +71,26 @@ if __name__ == "__main__":
   chroma_db_directory = "Database/chroma_db"
 
   query = "What does S.A.G.E stands for?"
-  k = 5
+  k = 2
   chunk_size = 1000
   chunk_overlap = 200
 
-  docs = load_report_txt(database_path)
+  if os.path.exists(chroma_db_directory):
+    print("Database Found, no need to embed to database anymore")
 
-  splits = split_text_into_chunks(chunk_size, chunk_overlap, docs)
+  else:
+    print("Database not found, creating new one")
 
-  vectorstore = ollama_embed_to_chroma_db(splits, embed_model, chroma_db_directory)
+    docs = load_report_txt(database_path)
+
+    splits = split_text_into_chunks(chunk_size, chunk_overlap, docs)
+
+    vectorstore = ollama_embed_to_chroma_db(splits, embed_model, chroma_db_directory)
+    
+    print("Done creating new Database")
 
   results = query_similarity_search(embed_model, chroma_db_directory, query, k)
+  print(results)
 
 
 
