@@ -1,7 +1,8 @@
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_ollama import OllamaEmbeddings
+from langchain_ollama import OllamaEmbeddings, ChatOllama
 from langchain_chroma import Chroma
+from langchain_core.prompts import ChatPromptTemplate
 
 import ollama
 import fitz  
@@ -64,6 +65,30 @@ def query_similarity_search(embed_model, chroma_db_directory, query, k):
   
   return results
 
+# Generates answer from the LLM
+def generate_answer(results, query, answer_model):
+  context_text = "\n\n---\n\n".join([doc.page_content for doc in results])
+
+  PROMPT_TEMPLATE = '''
+  Answer the question based on the following context:
+
+  {context}
+
+  -------
+
+
+  Question: {question}
+  '''
+  # ChatPromptTemplate is Langchain helping developers not to crash the code when passing in the data to the context and question there inside the prompt
+  prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+  prompt = prompt_template.format(context = context_text, question = query)
+
+  model = ChatOllama(model=answer_model)
+
+  answer_text = model.invoke(prompt)
+
+  return answer_text.content
+
 if __name__ == "__main__":
   filepath = "Internship Report Part 2 - Lucius Wilbert Tjoa - TP072404.pdf"
   database_path ="Database/report.txt"
@@ -90,7 +115,10 @@ if __name__ == "__main__":
     print("Done creating new Database")
 
   results = query_similarity_search(embed_model, chroma_db_directory, query, k)
-  print(results)
+  # print(results)
+
+  answer = generate_answer(results, query, "deepseek-r1:1.5b")
+  print(answer)
 
 
 
