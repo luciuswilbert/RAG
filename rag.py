@@ -1,32 +1,13 @@
+from langchain_community.document_loaders import TextLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_ollama import OllamaEmbeddings
+from langchain_chroma import Chroma
+
 import ollama
 import fitz  
 import re
 
-# # Generate the embedding
-# response = ollama.embeddings(
-#   model='nomic-embed-text',
-#   prompt='The sky is blue because of rayleigh scattering'
-# )
 
-# # Access the vector
-# vector = response['embedding']
-
-# print(f"Vector length: {len(vector)}")
-# print(vector[:5]) # Print first 5 dimensions
-
-
-# # Open the PDF
-# doc = fitz.open("Internship Report Part 2 - Lucius Wilbert Tjoa - TP072404.pdf") 
-# full_text = ""
-# for page in doc:
-#     full_text += page.get_text()
-
-# # The 'Clean' Count (Removing all spaces and newlines)
-# # clean_text = full_text.replace("\n", "").replace("\r", "").replace("\t", "")
-# clean_text = re.sub(r'\s+', ' ', full_text)
-
-# with open("Database/report.txt", 'w', encoding='utf-8') as w:
-#     w.write(clean_text)
   
 def read_pdf(filepath):
   doc = fitz.open(filepath) 
@@ -49,5 +30,33 @@ if __name__ == "__main__":
 
   full_text = read_pdf(filepath)
   clean_text = clean_text(full_text)
+
+  word_count = len(clean_text.split())
+  print(f"Total Word Count: {word_count}")
+
   write_text(database_path, clean_text)
   print("Done")
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Generate the embedding
+# response = ollama.embeddings(
+#   model='nomic-embed-text',
+#   prompt='The sky is blue because of rayleigh scattering'
+# )
+
+# # Access the vector
+# vector = response['embedding']
+
+# print(f"Vector length: {len(vector)}")
+# print(vector[:5]) # Print first 5 dimensions

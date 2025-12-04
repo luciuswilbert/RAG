@@ -2,3 +2,7 @@ sentence-transformers
 numpy
 ollama
 pymupdf
+langchain-community
+langchain-text-splitters
+langchain-chroma
+langchain-ollama
